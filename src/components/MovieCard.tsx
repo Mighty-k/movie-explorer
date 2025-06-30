@@ -1,15 +1,33 @@
 import { Link } from 'react-router-dom'
 import { IMAGE_BASE_URL } from '../constants'
-import type { Movie,WatchlistMovie } from '../types'
+import type { Movie, WatchlistMovie } from '../types'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 
 interface MovieCardProps {
   movie: Movie;
   index?: number;
-  addToWatchLater?: (movie: WatchlistMovie) => void;
+  onToggleWatchlist: (movie: WatchlistMovie) => void;
+  isInWatchlist: boolean;
 }
 
-export const MovieCard = ({ movie, index = 0, addToWatchLater }: MovieCardProps) => {
+export const MovieCard = ({ 
+  movie, 
+  index = 0, 
+  onToggleWatchlist,
+  isInWatchlist
+}: MovieCardProps) => {
+  const [isBookmarked, setIsBookmarked] = useState(isInWatchlist);
+
+  const handleToggle = () => {
+    const newState = !isBookmarked;
+    setIsBookmarked(newState);
+    onToggleWatchlist({
+      ...movie,
+      priority: newState ? 2 : undefined // Remove priority when unbookmarking
+    });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -59,59 +77,43 @@ export const MovieCard = ({ movie, index = 0, addToWatchLater }: MovieCardProps)
         </Link>
       </div>
 
-      {/* Watchlist button - only show if addToWatchLater function is provided */}
-      {addToWatchLater && (
-        <>
-          <button 
-            onClick={() => addToWatchLater({...movie, priority: 2})} // Default priority 2
-            className="absolute top-3 right-3 z-20 bg-gray-900/80 hover:bg-secondary p-2 rounded-full transition-all duration-300 transform hover:scale-110 shadow-lg"
-            aria-label="Add to watch later"
+      {/* Watchlist toggle button */}
+      <motion.button 
+        onClick={handleToggle}
+        className="absolute top-3 right-3 z-20 bg-gray-900/80 p-2 rounded-full transition-all duration-300 shadow-lg"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        aria-label={isBookmarked ? "Remove from watchlist" : "Add to watchlist"}
+      >
+        {isBookmarked ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-accent"
+            viewBox="0 0 20 20"
+            fill="currentColor"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white group-hover:text-accent"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            <span className="sr-only">Add to watchlist</span>
-          </button>
-          
-          {/* Priority selector (appears on hover) */}
-          <div className="absolute top-14 right-3 z-20 flex flex-col space-y-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {[1, 2, 3].map((level) => (
-              <button
-                key={level}
-                onClick={(e) => {
-                        e.stopPropagation();
-                        if (addToWatchLater) {
-                            addToWatchLater({
-                            ...movie,
-                            priority: level
-                            });
-                        }
-                        }}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${
-                  level === 1 
-                    ? 'bg-red-500/90 hover:bg-red-400' 
-                    : level === 2 
-                      ? 'bg-yellow-500/90 hover:bg-yellow-400' 
-                      : 'bg-green-500/90 hover:bg-green-400'
-                }`}
-              >
-                {level}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
+            <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 text-white group-hover:text-accent"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+        )}
+        <span className="sr-only">
+          {isBookmarked ? "Remove from watchlist" : "Add to watchlist"}
+        </span>
+      </motion.button>
     </motion.div>
   )
 }

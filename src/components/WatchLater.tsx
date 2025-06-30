@@ -1,10 +1,19 @@
-import type { Movie } from '../types'
+import type { WatchlistMovie } from '../types'
 // import { MovieList } from './MovieList'
 import { MovieCard } from './MovieCard'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 export const WatchLater = () => {
-  const [watchLater, setWatchLater] = useLocalStorage<Movie[]>('watchLater', [])
+   const [watchLater, setWatchLater] = useLocalStorage<WatchlistMovie[]>('watchLater', [])
+  
+//   const handleToggleWatchlist = (movie: WatchlistMovie) => {
+//     setWatchLater(prev => {
+//       const exists = prev.some(m => m.id === movie.id)
+//       return exists
+//         ? prev.filter(m => m.id !== movie.id)
+//         : [...prev, movie]
+//     })
+//   }
 
   const removeFromWatchLater = (movieId: number) => {
     setWatchLater(watchLater.filter((movie) => movie.id !== movieId))
@@ -19,8 +28,13 @@ export const WatchLater = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {watchLater.map((movie) => (
             <div key={movie.id} className="relative">
-              <MovieCard movie={movie} />
-              <button
+                <MovieCard
+                    key={movie.id}
+                    movie={movie}
+                    isInWatchlist={watchLater.some(m => m.id === movie.id)}
+                    onToggleWatchlist={() => removeFromWatchLater(movie.id)}
+                    />
+              {/* <button
                 onClick={() => removeFromWatchLater(movie.id)}
                 className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 transition-colors"
                 aria-label="Remove from watch later"
@@ -37,7 +51,7 @@ export const WatchLater = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
