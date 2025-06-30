@@ -9,13 +9,15 @@ interface MovieCardProps {
   index?: number;
   onToggleWatchlist: (movie: WatchlistMovie) => void;
   isInWatchlist: boolean;
+  isLoading?: boolean; // <-- add isLoading prop
 }
 
 export const MovieCard = ({ 
   movie, 
   // index = 0, 
   onToggleWatchlist,
-  isInWatchlist
+  isInWatchlist,
+  isLoading = false, // <-- default to false
 }: MovieCardProps) => {
   const [isBookmarked, setIsBookmarked] = useState(isInWatchlist);
   const navigate = useNavigate();
@@ -35,6 +37,18 @@ export const MovieCard = ({
   const handleCardClick = () => {
     navigate(`/movie/${movie.id}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="animate-pulse rounded-2xl bg-gray-800/40 border border-gray-700/30 shadow-2xl h-full flex flex-col sm:h-[400px] sm:min-w-[220px] sm:max-w-[260px] w-full min-h-[320px] max-w-full">
+        <div className="w-full h-48 sm:h-full bg-gray-700 rounded-t-2xl" />
+        <div className="p-4 flex-1 flex flex-col justify-end">
+          <div className="h-6 bg-gray-700 rounded mb-2 w-3/4" />
+          <div className="h-4 bg-gray-700 rounded w-1/2" />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <motion.div

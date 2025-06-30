@@ -8,9 +8,9 @@ interface HomeProps {
 }
 
 export const Home = ({ selectedGenre }: HomeProps) => {
-  const { movies: popularMovies } = usePopularMovies()
-  const { movies: nowPlayingMovies } = useNowPlayingMovies()
-  const { movies: topRatedMovies } = useTopRatedMovies()
+  const { movies: popularMovies, loading: loadingPopular } = usePopularMovies()
+  const { movies: nowPlayingMovies, loading: loadingNowPlaying } = useNowPlayingMovies()
+  const { movies: topRatedMovies, loading: loadingTopRated } = useTopRatedMovies()
   const [watchLater, setWatchLater] = useLocalStorage<Movie[]>('watchLater', [])
 
   // Filter movies by selected genre
@@ -31,16 +31,19 @@ export const Home = ({ selectedGenre }: HomeProps) => {
         movies={filterByGenre(popularMovies)}
         title="Popular Movies"
         addToWatchLater={addToWatchLater}
+        isLoading={loadingPopular}
       />
       <MovieList
         movies={filterByGenre(nowPlayingMovies)}
         title="Now Playing"
         addToWatchLater={addToWatchLater}
+        isLoading={loadingNowPlaying}
       />
       <MovieList
         movies={filterByGenre(topRatedMovies)}
         title="Top Rated"
         addToWatchLater={addToWatchLater}
+        isLoading={loadingTopRated}
       />
     </div>
   )

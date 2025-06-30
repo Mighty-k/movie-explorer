@@ -20,8 +20,37 @@ export const HeroCarousel = ({ movies = [] }: HeroCarouselProps) => {
     return () => clearInterval(interval)
   }, [movies.length])
 
-  // Return null if no movies
-  if (movies.length === 0) return null
+  // Skeleton loader if no movies yet (loading state)
+  if (movies.length === 0) {
+    return (
+      <div className="relative h-[60vw] max-h-[80vh] min-h-[300px] w-full overflow-hidden rounded-b-3xl shadow-2xl sm:h-[80vh] bg-gray-900">
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/30 to-transparent z-10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/70 to-transparent z-10" />
+        <div className="w-full h-full flex flex-col justify-end">
+          <div className="p-4 sm:p-12 w-full max-w-full sm:max-w-4xl">
+            <div className="animate-pulse">
+              <div className="h-8 sm:h-14 w-3/4 bg-gray-700 rounded mb-4" />
+              <div className="flex space-x-2 sm:space-x-4 mb-4 sm:mb-6">
+                <div className="h-6 w-16 bg-gray-700 rounded-full" />
+                <div className="h-6 w-16 bg-gray-700 rounded-full" />
+              </div>
+              <div className="h-16 sm:h-24 w-full bg-gray-700 rounded mb-6" />
+              <div className="h-10 w-32 bg-secondary/60 rounded" />
+            </div>
+          </div>
+        </div>
+        {/* Pagination dots skeleton */}
+        <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-20 flex space-x-2">
+          {[...Array(5)].map((_, idx) => (
+            <div
+              key={idx}
+              className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-700 animate-pulse"
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   const currentMovie = movies[currentIndex]
   if (!currentMovie?.backdrop_path) return null
