@@ -10,32 +10,63 @@
   }
   
   html {
-    @apply scroll-smooth;
+    scroll-behavior: smooth;
   }
   
   body {
-    @apply bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 min-h-screen;
+    background: linear-gradient(to bottom right, #1a202c, #2d3748);
+    color: #f3f4f6;
+    min-height: 100vh;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-secondary hover:bg-accent text-white font-bold py-3 px-6 rounded-full 
-           transition-all duration-300 transform hover:scale-105 shadow-lg 
-           hover:shadow-secondary/50 active:scale-95;
+    background-color: rgb(1, 180, 228); /* matches your --color-secondary */
+    color: #fff;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    transition: all 0.3s;
+    box-shadow: 0 10px 15px -3px rgba(1,180,228,0.5), 0 4px 6px -4px rgba(1,180,228,0.5);
+    transform: scale(1);
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(144, 206, 161); /* matches your --color-accent */
+    transform: scale(1.05);
+    box-shadow: 0 20px 25px -5px rgba(1,180,228,0.5), 0 8px 10px -6px rgba(1,180,228,0.5);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.95);
   }
   
   .card-hover {
-    @apply transition-all duration-500 hover:scale-102 hover:shadow-2xl hover:z-10;
+    transition: all 0.5s;
+    will-change: transform, box-shadow, z-index;
+  }
+  .card-hover:hover {
+    transform: scale(1.02);
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), 0 4px 6px -4px rgba(1,180,228,0.5);
+    z-index: 10;
   }
   
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-secondary to-accent;
+    background: linear-gradient(
+      to right,
+      rgb(var(--color-secondary)),
+      rgb(var(--color-accent))
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
   
   .smooth-tab {
-    @apply transition-all duration-300 ease-out;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
   }
 }
 
