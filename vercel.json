@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/movie/:movieid", "destination": "/index.html" },
+    { "source": "/movie/:movieid/:tab", "destination": "/index.html" },
+    { "source": "/movie/:movieid/:tab/:subtab", "destination": "/index.html" },
+    { "source": "/search/:query", "destination": "/index.html" },
+    { "source": "/search/:query/:page", "destination": "/index.html" },
+    { "source": "/:path*", "destination": "/index.html" }
+  ]
+}
